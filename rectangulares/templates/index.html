@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %} 
+
+{% block pageTitle %} Modelado y Simulacion de Sistemas Dinamicos {% endblock pageTitle %} 
+
+{% block title %} Modelado y Simulacion de Sistemas Dinamicos {% endblock title %} 
+
+{% load static %}
+
+{% block content %}
+
+<script type="text/javascript" src="{% static '/js/index.js' %}"></script>
+
+<section class="container">
+  <div class="grid-c-4 gap-3">
+  {% for tarea in tareas %}
+    <div class="bg-secondary rounded object-fit-scale">
+      <a
+        id="tarea{{tarea.id}}"
+        class="link-underline link-underline-opacity-0 text-white"
+        href="tasks/{{tarea.descripcion}}/"
+        rel="noopener noreferrer"
+      >
+        <section class="mt-2 p-2">Tarea #{{tarea.id}}</section>
+        <aside class="">
+          <p class="p-2">{{tarea.title}}</p>
+        </aside>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock content %}

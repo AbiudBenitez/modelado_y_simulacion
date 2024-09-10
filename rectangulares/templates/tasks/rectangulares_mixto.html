@@ -1,0 +1,38 @@
+{% extends 'layouts/base.html' %}
+
+
+{% block pageTitle %}
+  Generacion de Numeros Rectangulares
+{% endblock pageTitle %}
+
+
+{% block title %}
+  Generacion de Numeros Rectangulares - Congruencial Mixto
+{% endblock title %}
+  
+
+{% block content %}
+<form action="" method="POST" class="container">
+  {% csrf_token %}
+  <div class="row">
+    <section class="mb-3 col">
+      {{form.a.as_field_group}}
+    </section>
+    <section class="mb-3 col">
+      {{form.Xo.as_field_group}}
+    </section>
+    <section class="mb-3 col">
+      {{form.C.as_field_group}}
+    </section>
+    <section class="mb-3 col">
+      {{form.m.as_field_group}}
+    </section>
+  </div>
+  <div class="text-center">
+    <button class="btn btn-primary">Enviar Datos</button>
+  </div>
+</form>
+
+{% endblock content %}
+  
+  

@@ -1,0 +1,10 @@
+{
+  "python.REPL.enableREPLSmartSend": false,
+  "emmet.includeLanguages": {
+    "django-html": "html",
+    "javascript": "javascript",
+    "css": "css"
+  },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": false
+}
