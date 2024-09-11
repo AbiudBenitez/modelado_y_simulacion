@@ -15,9 +15,9 @@
     <title>{% block pageTitle %} {% endblock pageTitle %}</title>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+    <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Modelado y Simulacion</a>
+        <a class="navbar-brand" href="{% url 'index' %}">Modelado y Simulacion</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -63,13 +63,13 @@
       </div>
     </nav>
 
-    <header>
-      <h1 class="display-5 mt-3 ms-2">{% block title %} {% endblock title %}</h1>
-    </header>
-    <section class="contenedor">
+    <section class="container" style="min-height: 86vh;">
+      <header>
+        <h1 class="display-6 mt-1">{% block title %} {% endblock title %}</h1>
+      </header>
       {% block content %} {% endblock content %}
     </section>
-    <footer class="bg-primary mt-3 p-2 text-center">Todos los derechos reservados 2024</footer>
+    <footer class="bg-dark mt-3 p-2 text-center">Todos los derechos reservados 2024</footer>
   </body>
 </html>
 
