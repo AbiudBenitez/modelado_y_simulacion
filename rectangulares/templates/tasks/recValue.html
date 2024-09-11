@@ -1,3 +1,42 @@
-<h1>Aqui ira la respuesta</h1>
+{% extends 'layouts/base.html' %}
+{% load custom_tags %}
 
-{{ list }}
+
+{% block pageTitle %}
+  Generacion de Numeros Rectangulares - Congruencial Mixto - Respuesta
+{% endblock pageTitle %}
+
+
+{% block title %}
+  Generacion de Numeros Rectangulares - Congruencial Mixto
+{% endblock title %}
+
+
+{% block content %}
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">n</th>
+      <th scope="col">Xn</th>
+      <th scope="col">(aXo+C mod m)</th>
+      <th scope="col">Xn+1</th>
+      <th scope="col">Numero Rectangular</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in rango %}
+      {% with next_i=i|add:"1" %}
+        <tr>
+          <th>{{ i|add:1 }}</th>
+          <th>{{ list|get_item:i }}</th>
+          <th>(({{ a }})({{ list|get_item:i }})+{{ C }} mod {{ m }}) = {{ Pl|get_item:i }}/{{ m }}{% if residuo|get_item:i != 0 %} = {{ residuo|get_item:i }} {{ list|get_item:next_i }}/{{ m }} {% endif %} </th>
+          <th>{{ list|get_item:next_i }}</th>
+          <th>{{ list|get_item:next_i }}/{{ m }}</th>
+        </tr>
+      {% endwith %}
+    {% endfor %}    
+  </tbody>
+</table>
+
+{% endblock content %}
