@@ -4,7 +4,7 @@ from django.forms.renderers import BaseRenderer
 from django.forms.utils import ErrorList
 
 class datos(forms.Form):
-  a = forms.CharField(label="Introducr el valor de a", required=True)
+  a = forms.CharField(label="Introduce el valor de a", required=True)
   Xo = forms.CharField(label="Introduce el valor de Xo", required=True)
   C = forms.CharField(label="Introduce el valor de C", required=True)
   m = forms.CharField(label="Introduce el valot de m", required=True)
