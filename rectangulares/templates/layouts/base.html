@@ -51,7 +51,7 @@
               </a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'rectangulares_mixto' %}">Congruencial Mixto</a></li>
-                <li><a class="dropdown-item" href="#">Congruencial Multiplicativo</a></li>
+                <li><a class="dropdown-item" href="{% url 'rectangulares_multi' %}">Congruencial Multiplicativo</a></li>
                 {% comment %} <li><hr class="dropdown-divider" /></li>
                 <li>
                   <a class="dropdown-item" href="#">Something else here</a>
@@ -65,7 +65,7 @@
 
     <section class="container" style="min-height: 86vh;">
       <header>
-        <h1 class="display-6 mt-1">{% block title %} {% endblock title %}</h1>
+        <p class="mt-1 h3">{% block title %} {% endblock title %}</p>
       </header>
       {% block content %} {% endblock content %}
     </section>
