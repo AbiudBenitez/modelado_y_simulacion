@@ -14,6 +14,16 @@
 
 {% block content %}
 
+<div class="row">
+  <p class="col">Datos:</p>
+</div>
+<div class="row">
+  <p class="col text-center">a = {{ a }}</p>
+  <p class="col text-center">Xo = {{ Xo }}</p>
+  <p class="col text-center">C = {{ C }}</p>
+  <p class="col text-center">m = {{ m }}</p>
+</div>
+
 <table class="table">
   <thead>
     <tr>
@@ -28,15 +38,19 @@
     {% for i in rango %}
       {% with next_i=i|add:"1" %}
         <tr>
-          <th>{{ i|add:1 }}</th>
-          <th>{{ list|get_item:i }}</th>
-          <th>(({{ a }})({{ list|get_item:i }})+{{ C }} mod {{ m }}) = {{ Pl|get_item:i }}/{{ m }}{% if residuo|get_item:i != 0 %} = {{ residuo|get_item:i }} {{ list|get_item:next_i }}/{{ m }} {% endif %} </th>
-          <th>{{ list|get_item:next_i }}</th>
-          <th>{{ list|get_item:next_i }}/{{ m }}</th>
+          <td scope="row">{{ i|add:1 }}</td>
+          <td>{{ list|get_item:i }}</td>
+          <td>(({{ a }})({{ list|get_item:i }})+{{ C }} mod {{ m }}) = {{ Pl|get_item:i }}/{{ m }}{% if residuo|get_item:i != 0 %} = {{ residuo|get_item:i }} {{ list|get_item:next_i }}/{{ m }} {% endif %} </td>
+          <td>{{ list|get_item:next_i }}</td>
+          <td>{{ list|get_item:next_i }}/{{ m }}</td>
         </tr>
       {% endwith %}
     {% endfor %}    
   </tbody>
 </table>
+
+<p class="lead text-info text-center">
+  {{ message }}
+</p>
 
 {% endblock content %}
