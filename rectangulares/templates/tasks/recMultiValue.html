@@ -1,0 +1,57 @@
+{% extends 'layouts/base.html' %}
+{% load custom_tags %}
+
+
+{% block pageTitle %}
+  Generacion de Numeros Rectangulares
+{% endblock pageTitle %}
+  
+
+{% block title %}
+  Generacion de Numeros Rectangulares - Congurencial Multiplicativo
+{% endblock title %}
+
+
+{% block content %}
+
+  <div class="row">
+    <p class="col">Datos:</p>
+  </div>
+  <div class="row">
+    <p class="col text-center">a = {{ a }}</p>
+    <p class="col text-center">Xo = {{ Xo }}</p>
+    <p class="col text-center">m = {{ m }}</p>
+    <p class="col text-center">PE = m/4 = {{ pe }}</p>
+  </div>
+
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">n</th>
+        <th scope="col">Xn</th>
+        <th scope="col">(aXo mod m)</th>
+        <th scope="col">Xn+1</th>
+        <th scope="col">Numero Rectangular</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in rango %}
+        {% with next_i=i|add:"1" %}
+          <tr>
+            <td scope="row">{{ i|add:"1" }}</td>
+            <td>{{ list|get_item:i }}</td>
+            <td>(({{ a }})({{ list|get_item:i }}) mod {{ m }}) = {{ Pl|get_item:i }}/{{ m }}{% if residuo|get_item:i != 0 %} = {{ residuo|get_item:i }}/{{ m }} {% endif %}</td>
+            <td>{{ list|get_item:next_i }}</td>
+            <td>{{ list|get_item:next_i }}/{{ m }}</td>
+          </tr>
+        {% endwith %}
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <p class="lead text-info text-center">
+    {{ message }}
+  </p>
+
+{% endblock content %}
+  
