@@ -39,6 +39,7 @@ def recValue(request):
     m = request.session.get('m')
     Xo = request.session.get('Xo')
     Pl = request.session.get('Pl')
+    message = request.session.get('message')
     rango = range(len(list) - 1)  
     data = {
       'list': list,
@@ -48,12 +49,40 @@ def recValue(request):
       'm': m,
       'Xo': Xo,
       'rango': rango,
-      'Pl': Pl
+      'Pl': Pl,
+      'message': message
     }
     return render(request, "tasks/recValue.html/", data)
 
+def recMultiValue(request):
+    list = request.session.get('list')
+    residuo = request.session.get('residuo')
+    a = request.session.get('a')
+    pe = request.session.get('pe')
+    m = request.session.get('m')
+    Xo = request.session.get('Xo')
+    Pl = request.session.get('Pl')
+    message = request.session.get('message')
+    rango = range(len(list) - 1)
+    data = {
+        'list': list,
+        'residuo': residuo,
+        'a': a,
+        'pe': pe,
+        'm': m,
+        'Xo': Xo,
+        'Pl': Pl,
+        'message': message,
+        'rango': rango
+    }
+    print(data)
+    return render(request, "tasks/recMultiValue.html/", data)
+
 def rectangulares_mixto(request):
     return render(request, "tasks/rectangulares_mixto.html", {'form': datos()})
+
+def rectangulares_multi(request):
+    return render(request, "tasks/rectangulares_multi.html", {'form': datos()})
       
 def mixtos_datos(request): 
   if request.method == 'POST':
@@ -79,13 +108,12 @@ def mixtos_datos(request):
         p2 = floor * m
         Xn = p1-p2
         temp = Xn
-        print(p1)
-        if Xn in Xl :
+
+        if Xn in Xl or len(Xl) == m + 1 :
             Xl += [Xn]
             indice = Xl.index(Xn)
             temp = Xo
-            request.session['list'] = Xl
-            if indice == 0 and len(Xl) == m:
+            if indice == 0 and len(Xl) == m + 1 :
                 message = "Como n = m y Xn = Xn+1. El periodo es completo y los numeros rectangulares se aceptan"
             else :
                 message = "Como n != m y Xn = Xn+1. Los numeros rectangulares son rechazados y el periodo es incompleto"
@@ -98,9 +126,52 @@ def mixtos_datos(request):
     request.session['a'] = a
     request.session['C'] = C
     request.session['m'] = m
-    request.session['mensaje'] = message
+    request.session['message'] = message
     return redirect("recValue")
     # url = reverse("recValue") + f'?list={Xl}'
     # return redirect(url)
   
-    
+def multi_datos(request):
+    if request.method == 'POST' :
+        data = request.POST
+        a = int(data['a'])
+        Xo = int(data['Xo'])
+        m = int(data['m'])
+        pe = int(m/4)
+        Xl = [Xo]
+        Rl = []
+        Pl = []
+        temp = None
+        
+        while temp != Xo:
+            if temp == None:
+                p1 = a*Xo
+            else :
+                p1 = a*temp
+                
+            floor = math.floor(p1/m)
+            Pl += [p1]
+            Rl += [floor]
+            p2 = floor * m
+            Xn = p1 - p2
+            temp = Xn
+            
+            if Xn in Xl or len(Xl) == pe + 1 :
+                Xl += [Xn]
+                indice = Xl.index(Xn)
+                temp = Xo
+                if indice == 0 and len(Xl) == pe + 1 :
+                    message = "Como n = PE y Xn = Xn+1. El periodo es completo y los numeros rectangulares son aceptados."
+                else :
+                    message = "Como n != PE o Xn = Xn+1. Los numeros rectangulares son rechazados y el perido es incompleto"
+            else : 
+                Xl += [Xn]
+        request.session['list'] = Xl
+        request.session['residuo'] = Rl
+        request.session['Pl'] = Pl
+        request.session['Xo'] = Xo 
+        request.session['a'] = a
+        request.session['m'] = m
+        request.session['pe'] = pe
+        request.session['message'] = message
+        return redirect("recMultiValue")
