@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load custom_tags %}
+{% load static %}
 
 
 {% block pageTitle %}
@@ -13,6 +14,10 @@
 
 
 {% block content %}
+<script type="text/javascript" src="{% static '/js/rectangulares/promedios.js' %}"></script>
+<script>
+  let Zo = {{ Zo }}
+</script>
 
 <div class="row">
   <p class="col">Datos:</p>
@@ -52,5 +57,34 @@
 <p class="lead text-info text-center">
   {{ message }}
 </p>
-
+{% if validate == True %}
+  <div class="row">
+    <p class="col-1 text-end">x̅ = </p>
+    <p class="col-11">
+      {{ nr }}
+    </p>
+    <p class="col-1"></p>
+    <hr class="col-11">
+    <p class="col-1"></p>
+    <p class="col-11 text-center">
+      {{ tamano }}
+    </p>
+    <p class="col-1 text-end">x̅ = </p>
+    <p class="col-1">
+      {{ media }}
+    </p>
+    <p class="col-5">
+      Zo = | (({{ media }} - 1/2) * √{{ tamano }}) / √(1/12) | = {{ Zo }} 
+    </p>
+    <form action="" class="row g-3 text-center m-auto justify-content-center">{% csrf_token %}
+      <div class="col-auto">{{ form.alfa.label }}</div>
+      <div class="col-auto">{{ form.alfa }}</div>
+      <button class="btn btn-info btn-sm col-auto" id="btnSubmitAlpha">Calcular</button>
+    </form>
+    <div class="row text-center m-auto justify-content-center">
+      <p class="col-auto" id="respuesta" style="display: none;">
+      </p>
+    </div>
+  </div>
+  {% endif %}
 {% endblock content %}
