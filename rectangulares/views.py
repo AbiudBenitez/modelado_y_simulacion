@@ -1,3 +1,4 @@
+import json
 import math
 from django.shortcuts import redirect, render
 from django.http import HttpResponse
@@ -5,7 +6,8 @@ from django.http import JsonResponse
 from django.urls import reverse
 from .models import Proyect, Task
 from django.shortcuts import get_object_or_404, render
-from .forms import datos
+from .forms import datos, opcionales
+from scipy.stats import norm
 
 
 # Create your views here.
@@ -39,6 +41,8 @@ def recValue(request):
     m = request.session.get('m')
     Xo = request.session.get('Xo')
     Pl = request.session.get('Pl')
+    nr = request.session.get('nr')
+    validate = request.session.get('validate')
     message = request.session.get('message')
     rango = range(len(list) - 1)  
     data = {
@@ -50,8 +54,23 @@ def recValue(request):
       'Xo': Xo,
       'rango': rango,
       'Pl': Pl,
-      'message': message
+      'nr': nr,
+      'message': message,
+      'validate': validate
     }
+    
+    if validate == True :
+        sumaL = sum(nr)
+        tamano = len(nr)
+        media = sumaL/tamano
+        Zo = abs(((media - 1/2) * math.sqrt(tamano)) / math.sqrt(1/12))
+        data.update({
+            'sumaL': sumaL,
+            'tamano': tamano,
+            'media': media,
+            'Zo': Zo,
+            'form': opcionales()
+        })
     return render(request, "tasks/recValue.html/", data)
 
 def recMultiValue(request):
@@ -62,7 +81,9 @@ def recMultiValue(request):
     m = request.session.get('m')
     Xo = request.session.get('Xo')
     Pl = request.session.get('Pl')
+    nr = request.session.get('nr')
     message = request.session.get('message')
+    validate = request.session.get('validate')
     rango = range(len(list) - 1)
     data = {
         'list': list,
@@ -73,9 +94,24 @@ def recMultiValue(request):
         'Xo': Xo,
         'Pl': Pl,
         'message': message,
-        'rango': rango
+        'rango': rango,
+        'nr': nr,
+        'validate': validate
     }
-    print(data)
+    
+    if validate == True :
+        sumaL = sum(nr)
+        tamano = len(nr)
+        media = sumaL/tamano
+        Zo = abs(((media - 1/2) * math.sqrt(tamano)) / math.sqrt(1/12))
+        data.update({
+            'sumaL': sumaL,
+            'tamano': tamano,
+            'media': media,
+            'Zo': Zo,
+            'form': opcionales()
+        })
+    
     return render(request, "tasks/recMultiValue.html/", data)
 
 def rectangulares_mixto(request):
@@ -94,6 +130,7 @@ def mixtos_datos(request):
     Xl = [Xo]
     Rl = []
     Pl = []
+    nr = []
     temp = None
     
     while temp != Xo :
@@ -111,21 +148,27 @@ def mixtos_datos(request):
 
         if Xn in Xl or len(Xl) == m + 1 :
             Xl += [Xn]
+            nr += [Xn/m]
             indice = Xl.index(Xn)
             temp = Xo
             if indice == 0 and len(Xl) == m + 1 :
                 message = "Como n = m y Xn = Xn+1. El periodo es completo y los numeros rectangulares se aceptan"
+                validate = True
             else :
                 message = "Como n != m y Xn = Xn+1. Los numeros rectangulares son rechazados y el periodo es incompleto"
+                validate = False
         else :
+            nr += [Xn/m]
             Xl += [Xn]
     request.session['list'] = Xl
     request.session['residuo'] = Rl
     request.session['Pl'] = Pl
     request.session['Xo'] = Xo
+    request.session['nr'] = nr
     request.session['a'] = a
     request.session['C'] = C
     request.session['m'] = m
+    request.session['validate'] = validate
     request.session['message'] = message
     return redirect("recValue")
     # url = reverse("recValue") + f'?list={Xl}'
@@ -141,6 +184,7 @@ def multi_datos(request):
         Xl = [Xo]
         Rl = []
         Pl = []
+        nr = []
         temp = None
         
         while temp != Xo:
@@ -158,20 +202,46 @@ def multi_datos(request):
             
             if Xn in Xl or len(Xl) == pe + 1 :
                 Xl += [Xn]
+                nr += [Xn/m]
                 indice = Xl.index(Xn)
                 temp = Xo
                 if indice == 0 and len(Xl) == pe + 1 :
                     message = "Como n = PE y Xn = Xn+1. El periodo es completo y los numeros rectangulares son aceptados."
+                    validate = True
                 else :
                     message = "Como n != PE o Xn = Xn+1. Los numeros rectangulares son rechazados y el perido es incompleto"
+                    validate = False
             else : 
+                nr += [Xn/m]
                 Xl += [Xn]
         request.session['list'] = Xl
         request.session['residuo'] = Rl
+        request.session['nr'] = nr
         request.session['Pl'] = Pl
         request.session['Xo'] = Xo 
         request.session['a'] = a
         request.session['m'] = m
         request.session['pe'] = pe
+        request.session['validate'] = validate
         request.session['message'] = message
         return redirect("recMultiValue")
+    
+def calcular_alpha(request) :
+    if request.method == 'POST' :
+        try:
+            data = json.loads(request.body)
+            alpha_dato = int(data.get('alpha_dato'))
+            alpha_real = 1 - (alpha_dato / 100)
+            Zar = alpha_real / 2
+            Z = norm.ppf(1 - (alpha_dato / 100) / 2)
+            
+            response_data = {
+                'alpha_real' : alpha_real,
+                'Zar': Zar,
+                'Z': Z
+            } 
+            return JsonResponse(response_data)
+        except json.JSONDecoderError :
+            return JsonResponse({'error': 'Invalid JSON'}, status=400)
+
+    return JsonResponse({'error': 'Invalid request method'}, status=405)       
