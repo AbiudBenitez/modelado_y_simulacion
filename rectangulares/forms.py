@@ -28,3 +28,13 @@ class datos(forms.Form):
     super(datos, self).__init__(*args, **kwargs)  
     for visible in self.visible_fields():
       visible.field.widget.attrs['class'] = 'form-control'
+  
+class opcionales(forms.Form):
+  alfa = forms.FloatField(
+    label="Introduce el valor para α"
+  )
+  
+  def __init__(self, *args, **kwargs):
+    super(opcionales, self).__init__(*args, **kwargs)  
+    for visible in self.visible_fields():
+      visible.field.widget.attrs['class'] = 'form-control form-control-sm'
