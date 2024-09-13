@@ -13,4 +13,5 @@ urlpatterns = [
     #SE DECLARAN LOS URLS QUE SOLO PROCESAN DATOS
     path("mixtos_datos/", views.mixtos_datos, name="mixtos_datos"),
     path("multi_datos/", views.multi_datos, name="multi_datos"),
+    path("calcular_alpha/", views.calcular_alpha, name="calcular_alpha"),
 ]
