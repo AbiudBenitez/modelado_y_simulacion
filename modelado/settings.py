@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', 'j@w&h&1v!74$_5lagi!#9bkzxf=qup
 # DEBUG = True
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['mysterious-meadow-72600-bda34563aeb6.herokuapp.com', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -140,3 +140,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # La URL que se utilizará cuando se haga referencia a archivos estáticos (desde donde se entregarán)
 STATIC_URL = '/static/'
+
+# Simplified static file serving.
+# https://warehouse.python.org/project/whitenoise/
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
