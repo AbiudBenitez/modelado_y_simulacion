@@ -1,1 +1,1 @@
-web: gunicorn modelado.wsgi --log-file -
+web: gunicorn modelado.wsgi 
