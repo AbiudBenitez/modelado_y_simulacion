@@ -80,11 +80,15 @@ WSGI_APPLICATION = "modelado.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+    'default': dj_database_url.config(default='postgres://u67hrivgifd8d2:p38b2c9532fa4555cba2f94f4bd2aa7afaf9125a3517ec07c94b91227d418e2f1@c9uss87s9bdb8n.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com:5432/df92v36u9mnq5h')
 }
 
 # Heroku: Actualice la configuración de la base de datos desde $DATABASE_URL.
