@@ -1,0 +1,71 @@
+{% extends 'layouts/base.html' %}
+{% load custom_tags %}
+{% load static %}
+
+{% block pageTitle %}
+  Generacion de Numeros Rectangulares
+{% endblock pageTitle %}
+  
+
+{% block title %}
+  Prueba de Promedios
+{% endblock title %}
+
+
+{% block content %}
+<script type="text/javascript" src="{% static '/js/promedios/input_num.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+
+<form id="promedios_data" action="" method="post" class="mb-3">
+  {% csrf_token %}
+  <p class="h5">Selecciona la manera de introducir los numeros rectangulares</p>
+  <section class="row mb-3">
+    <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked="">
+      <label class="btn btn-outline-info" for="btnradio1">Manual</label>
+      <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+      <label class="btn btn-outline-info" for="btnradio2">Archivo (csv)</label>
+    </div>
+  </section>
+  <div class="d-none" id="numeros">
+    <label for="file_numbers" class="form-label">Selecciona el archivo que contiene los numeros: </label>
+    <input type="file" name="file_numbers" id="file_numbers" class="form-control" accept=".csv">
+  </div>
+  <div class="row d-none " id="numeros_cont">
+    <label for="num_rec" class="form-label">Introduce la cantidad de numeros a capturar: </label>
+    <section class="input-group mb-3">
+      <input type="number" required name="num_rec" id="num_rec" class="form-control" aria-describedby="button-addon2">
+      <button class="btn btn-outline-success" type="button" id="btn-enviar">Enviar</button>
+    </section>
+    <section class="row justify-content-center" id="manual-numbers">
+    </section>
+  </div>
+</form>
+<div class="row d-none" id="response">
+  <h3 class="col-12">Promedios</h3>
+  <p class="col-1 text-end">x̅ = </p>
+  <p class="col-11" id="nrVal">
+  </p>
+  <p class="col-1"></p>
+  <hr class="col-11">
+  <p class="col-1"></p>
+  <p class="col-11 text-center" id="nval">
+  </p>
+  <p class="col-1 text-end">x̅ = </p>
+  <p class="col-1" id="mediaVal">
+  </p>
+  <p class="col-5" id="formulaVals">
+  </p>
+  <form action="" class="row g-3 text-center m-auto justify-content-center">{% csrf_token %}
+    <label class="col-auto form-label" for="id_alpha">{{ form.alfa.label }}</label>
+    <div class="col-auto">{{ form.alfa }}</div>
+    <button class="btn btn-info btn-sm col-auto" id="btnSubmitAlpha">Calcular</button>
+  </form>
+  <div class="row text-center m-auto justify-content-center">
+    <p class="col-auto" id="respuesta" style="display: none;">
+    </p>
+  </div>
+</div>
+
+{% endblock content %}
+  
