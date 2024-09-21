@@ -7,7 +7,7 @@ from django.urls import reverse
 from .models import Proyect, Task
 from django.shortcuts import get_object_or_404, render
 from .forms import datos, opcionales
-from scipy.stats import norm
+from scipy.stats import norm, ksone
 
 
 # Create your views here.
@@ -253,6 +253,31 @@ def calcular_alpha(request):
 
     return JsonResponse({"error": "Invalid request method"}, status=405)
 
+def calcular_alpha_dn(request):
+    if request.method == "POST":
+        try:
+            data = json.loads(request.body)
+            alpha_dato = int(data.get("alpha_dato"))
+            alpha_real = alpha_dato / 100
+            n = int(data.get("n"))
+            datos = data.get("promedios")
+            if(alpha_dato == 5) :
+                c = 1.36
+            elif (alpha_dato == 1) :
+                c = 1.63
+            else :
+                c = 1.22
+            
+            D_alpha_n = c / math.sqrt(n)
+            
+            # D_alpha_n = ksone.ppf(1 - alpha_real, n)
+
+            response_data = {"alpha_real": alpha_real, "n": n, "Dan": D_alpha_n}
+            return JsonResponse(response_data)
+        except json.JSONDecoderError:
+            return JsonResponse({"error": "Invalid JSON"}, status=400)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 def promedios(request):
     data = {
@@ -265,7 +290,7 @@ def promedio_value(request):
         try:
             data = json.loads(request.body)
             lista = data.get("lista")
-            print(lista)
+            # print(lista)
             suma = sum(lista)
             n = len(lista)
             promedio = suma/n
@@ -276,6 +301,37 @@ def promedio_value(request):
                             "n": n, 
                             "lista": lista, 
                             "Zo": Zo}
+            return JsonResponse(request_data)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=405)
+    
+    return JsonResponse({"error": "Invalid request method"}, status=405)
+
+def ks_value(request):
+    if request.method == "POST":
+        try:
+            Fxi = []
+            Dn = []
+            
+            data = json.loads(request.body)
+            lista = data.get("lista")
+            print(lista)
+            n = len(lista)
+            listaOrd = sorted(lista)
+            print(listaOrd)
+            for i in listaOrd :
+                xi = (int(listaOrd.index(i)) + 1) / n
+                Fxi += [xi]
+                Dn += [xi - i]
+                Dnm = max(Dn)
+            
+            request_data = {"n": n, 
+                            "lista": lista,
+                            "listaOrd": listaOrd,
+                            "Fxi": Fxi,
+                            "Dn": Dn,
+                            "Dnm": Dnm}
+            
             return JsonResponse(request_data)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=405)
