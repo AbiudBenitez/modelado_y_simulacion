@@ -1,7 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
   const BTN_SUBMIT = document.getElementById("btnSubmitAlpha"),
     ID_ALPHA = document.getElementById("id_alfa"),
-    CONT_RES = document.getElementById("respuesta")
+    CONT_RES = document.getElementById("respuesta"),
+    BTNEXPORT = document.getElementById("exportCSV")
 
   BTN_SUBMIT.addEventListener("click", (e) => {
     e.preventDefault()
@@ -58,4 +59,27 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error('Error:', error);
       });
   })
+
+  BTNEXPORT.addEventListener("click", (e) => {
+    e.preventDefault()
+    console.log(Nr);
+    downloadCSV([Nr], "rectangulares.csv")
+  })
+
+  function downloadCSV(array, filename) {
+    // Convertir el array a CSV
+    const csvContent = array.map(e => e.join(",")).join("\n");
+
+    // Crear un blob con el contenido CSV
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+
+    // Crear un enlace y simular un clic para descargar el archivo
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", filename);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
 })
