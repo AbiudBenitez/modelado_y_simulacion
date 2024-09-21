@@ -15,9 +15,17 @@ document.addEventListener("DOMContentLoaded", () => {
     FORMULA = document.getElementById("formulaVals"),
     DIVRESPONSE = document.getElementById("response"),
     BTNSUBMITALPHA = document.getElementById("btnSubmitAlpha"),
-    RENDER = new FileReader()
+    BTNSUBMITALPHADN = document.getElementById("btnSubmitAlphaDn"),
+    RENDER = new FileReader(),
+    TBODYKS = document.getElementById("tbodyks"),
+    TABLEKS = document.getElementById("tableks")
+
+  const DIVKS = document.getElementById("responseks")
 
     let Zo = ''
+    let Dn = ''
+    let n = ''
+    let promedios
 
     function getCookie(name) {
       let cookieValue = null;
@@ -53,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     FILENUMBERS.addEventListener("change", (event) => {
-      let promedios
       const FILE = event.target.files[0];
       RENDER.onload = (e) => {
         const csvData = e.target.result
@@ -65,6 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
             console.log(results.data[0]);
             promedios = results.data[0].map(i=>Number(i));
             calcProm(promedios)
+            calcKS(promedios)
           }
         })
       }
@@ -101,6 +109,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         console.log(promedio);
         calcProm(promedio)
+        calcKS(promedio)
       }
     })
 
@@ -142,6 +151,47 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     })
 
+    BTNSUBMITALPHADN.addEventListener("click", (e) => {
+      e.preventDefault()
+      const ID_ALPHA_DN = document.getElementById("id_alfaDn"), 
+      CONT_RES_DN = document.getElementById("respuestaDn")
+      fetch('/calcular_alpha_dn/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'), // Añadir el token CSRF en los headers
+        },
+        body: JSON.stringify({
+          alpha_dato: ID_ALPHA_DN.value,
+          n: n,
+          promedios: promedios
+        }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error en la solicitud');
+          }
+          return response.json();
+        })
+        .then(data => {
+          CONT_RES_DN.style.display = "block"
+          CONT_RES_DN.innerHTML = "<p class='text-warning'>Revisa el valor original de la tabla, ya que esta funcion no es optima para muestras menores de 100</p>"
+          CONT_RES_DN.innerHTML += "d <sub>α,N</sub> = d <sub>" + data['alpha_real'] + "," + data['n'] + "</sub> = " + data['Dan']
+          if(Dn < data['Dan']) {
+            CONT_RES_DN.innerHTML += "<br><span class='lead text-info'>"+ Dn +" < "+ data['Dan'] +"</span>"
+            CONT_RES_DN.innerHTML += "<br><span class='lead text-success'>Los numeros rectangulares son ACEPTADOS</span>"
+          } else {
+            CONT_RES_DN.innerHTML += "<br><span class='lead text-info'>"+ Dn +" > "+ data['Dan'] +"</span>"
+            CONT_RES_DN.innerHTML += "<br><span class='lead text-danger'>Los numeros rectangulares son RECHAZADOS</span>"
+  
+          }
+          console.log('Respuesta del servidor:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    })
+
     function calcProm(datos) {
       DIVRESPONSE.classList.remove("d-none")
       fetch('/promedio_value/', {
@@ -174,6 +224,42 @@ document.addEventListener("DOMContentLoaded", () => {
           MEDIAVAL.innerHTML = data['promedio']
           FORMULA.innerHTML = "Zo = | (("+ data['promedio'] +" - 1/2) * √"+ data['n'] +") / √(1/12) | = " + data['Zo']
           Zo = data['Zo']
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    function calcKS(datos) {
+      DIVKS.classList.remove("d-none")
+      fetch('/ks_value/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrftoken, // Añadir el token CSRF en los headers
+        },
+        body: JSON.stringify({
+          lista: datos
+        }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error en la solicitud');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Respuesta del servidor:', data);
+          for(let i = 0; i < data['n']; i++) {
+            TBODYKS.innerHTML += '<tr></tr>'
+            TBODYKS.lastChild.innerHTML += '<td>'+ parseInt(i+1) +'</td>'
+            TBODYKS.lastChild.innerHTML += '<td>'+ data['listaOrd'][i] +'</td>'
+            TBODYKS.lastChild.innerHTML += '<td>'+ parseInt(i+1) +' / '+ data['n'] +' = '+ data['Fxi'][i] +'</td>'
+            TBODYKS.lastChild.innerHTML += '<td>'+  data['Fxi'][i] +' - '+ data['listaOrd'][i] +' = '+ data['Dn'][i] +'</td>'
+          }
+          TABLEKS.innerHTML += "<p class='text-center col-12'>D<sub>n</sub> = "+ data['Dnm'] +"</p>"
+          Dn = data['Dnm']
+          n = data['n']
         })
         .catch(error => {
           console.error('Error:', error);
