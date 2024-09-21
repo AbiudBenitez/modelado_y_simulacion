@@ -15,6 +15,14 @@
 
 {% block content %}
   <script type="text/javascript" src="{% static '/js/rectangulares/promedios.js' %}"></script>
+
+  {{ nr|json_script:"my-list-data" }}
+  
+  <script>
+    // Recuperar los datos en JavaScript
+    const Nr = JSON.parse(document.getElementById('my-list-data').textContent);
+  </script>
+  
   <script>
     let Zo = {{ Zo }}
   </script>
@@ -58,6 +66,9 @@
     {{ message }}
   </p>
   {% if validate == True %}
+  <section class="row">
+    <button class="btn btn-info col-12 mb-3" id="exportCSV">Exportar CSV</button>
+  </section>
   <div class="row">
     <p class="col-1 text-end">x̅ = </p>
     <p class="col-11">
