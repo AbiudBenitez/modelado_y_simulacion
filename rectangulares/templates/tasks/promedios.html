@@ -3,12 +3,12 @@
 {% load static %}
 
 {% block pageTitle %}
-  Generacion de Numeros Rectangulares
+Pruebas Estadisticas
 {% endblock pageTitle %}
   
 
 {% block title %}
-  Prueba de Promedios
+  Pruebas Estadisticas
 {% endblock title %}
 
 
@@ -63,6 +63,32 @@
   </form>
   <div class="row text-center m-auto justify-content-center">
     <p class="col-auto" id="respuesta" style="display: none;">
+    </p>
+  </div>
+</div>
+<div class="row d-none" id="responseks">
+  <h3 class="col-12">Prueba de Kolmogorov-Smirnov (KS)</h3>
+  <section class="col-12" id="tableks">
+    <table class="table text-center">
+      <thead>
+        <tr>
+          <th>i</th>
+          <th>x<sub>i</sub></th>
+          <th>F( x<sub>i</sub> )</th>
+          <th>D<sub>n</sub></th>
+        </tr>
+      </thead>
+      <tbody id="tbodyks">
+      </tbody>
+    </table>
+  </section>
+  <form action="" class="row g-3 text-center m-auto justify-content-center">{% csrf_token %}
+    <label class="col-auto form-label" for="id_alpha">{{ form.alfa.label }}</label>
+    <div class="col-auto">{{ form.alfaDn }}</div>
+    <button class="btn btn-info btn-sm col-auto" id="btnSubmitAlphaDn">Calcular</button>
+  </form>
+  <div class="row text-center m-auto justify-content-center">
+    <p class="col-auto" id="respuestaDn" style="display: none;">
     </p>
   </div>
 </div>
