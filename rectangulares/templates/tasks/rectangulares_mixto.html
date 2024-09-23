@@ -15,21 +15,21 @@
 <form action="{% url 'mixtos_datos' %}" method="POST">
   {% csrf_token %}
   <div class="row">
-    <section class="mb-3 col">
+    <section class="mb-3 col-12 col-xl-6 col-xxl-3">
       {{form.a.as_field_group}}
     </section>
-    <section class="mb-3 col">
+    <section class="mb-3 col-12 col-xl-6 col-xxl-3">
       {{form.Xo.as_field_group}}
     </section>
-    <section class="mb-3 col">
+    <section class="mb-3 col-12 col-xl-6 col-xxl-3">
       {{form.C.as_field_group}}
     </section>
-    <section class="mb-3 col">
+    <section class="mb-3 col-12 col-xl-6 col-xxl-3">
       {{form.m.as_field_group}}
     </section>
   </div>
   <div class="text-center">
-    <button class="btn btn-primary">Enviar Datos</button>
+    <button class="btn col-12 btn-primary">Enviar Datos</button>
   </div>
 </form>
 

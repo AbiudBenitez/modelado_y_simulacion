@@ -15,18 +15,18 @@
   <form action="{% url 'multi_datos' %}" method="POST">
     {% csrf_token %}
     <div class="row">
-      <section class="mb-3 col">
+      <section class="mb-3 col-12 col-xl-4">
         {{ form.a.as_field_group }}
       </section>
-      <section class="mb-3 col">
+      <section class="mb-3 col-12 col-xl-4">
         {{ form.Xo.as_field_group}}
       </section>
-      <section class="mb-3 col">
+      <section class="mb-3 col-12 col-xl-4">
         {{ form.m.as_field_group}}
       </section>
     </div>
     <div class="text-center">
-      <button class="btn btn-primary">
+      <button class="btn btn-primary col-12">
         Enviar Datos
       </button>
     </div>
