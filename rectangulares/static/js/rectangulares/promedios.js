@@ -62,7 +62,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   BTNEXPORT.addEventListener("click", (e) => {
     e.preventDefault()
-    console.log(Nr);
     downloadCSV([Nr], "rectangulares.csv")
   })
 
