@@ -37,9 +37,9 @@ Pruebas Estadisticas
       <input type="number" required name="num_rec" id="num_rec" class="form-control" aria-describedby="button-addon2">
       <button class="btn btn-outline-success" type="button" id="btn-enviar">Enviar</button>
     </section>
-    <section class="row justify-content-center" id="manual-numbers">
-    </section>
   </div>
+  <section class="row justify-content-center d-none" id="manual-numbers">
+  </section>
 </form>
 <div class="row d-none" id="response">
   <h3 class="col-12">Promedios</h3>
@@ -51,10 +51,10 @@ Pruebas Estadisticas
   <p class="col-1"></p>
   <p class="col-11 text-center" id="nval">
   </p>
-  <p class="col-1 text-end">x̅ = </p>
-  <p class="col-1" id="mediaVal">
+  <p class="col-1 col-lg-1 text-end">x̅ = </p>
+  <p class="col-11 col-lg-1" id="mediaVal">
   </p>
-  <p class="col-5" id="formulaVals">
+  <p class="col-md-12 col-lg-10" id="formulaVals">
   </p>
   <form action="" class="row g-3 text-center m-auto justify-content-center">{% csrf_token %}
     <label class="col-auto form-label" for="id_alpha">{{ form.alfa.label }}</label>

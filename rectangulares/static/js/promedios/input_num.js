@@ -46,17 +46,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if(BTN_RADIO1.checked === true) {
       MANUAL.classList.toggle("d-none")
+      MANUAL_NUMBERS.classList.toggle("d-none")
     } else {
       ARCHIVO.classList.toggle("d-none")
     }
 
     BTN_RADIO2.addEventListener("change", () => {
       MANUAL.classList.add("d-none")
+      MANUAL_NUMBERS.classList.add("d-none")
       ARCHIVO.classList.remove("d-none")
     })
 
     BTN_RADIO1.addEventListener("change", () => {
       MANUAL.classList.remove("d-none")
+      MANUAL_NUMBERS.classList.remove("d-none")
       ARCHIVO.classList.add("d-none")
     })
 
@@ -89,7 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let cantidad = INPUT_NUM.value
         MANUAL_NUMBERS.innerHTML = ''
         for (let i = 0; i < cantidad; i++) {
-          MANUAL_NUMBERS.innerHTML += '<section class="col-3 mb-3"></section>'
+          MANUAL_NUMBERS.innerHTML += '<section class="col-sm-6 col-lg-4 col-xl-3 mb-3"></section>'
           MANUAL_NUMBERS.lastChild.innerHTML = '<label for="numero_'+ parseInt(i+1) +'" class="form-label" id="label_'+ parseInt(i+1) +'">Numero '+ parseInt(i+1) +'</label>'
           MANUAL_NUMBERS.lastChild.innerHTML += '<input type="text" required class="form-control" name="numero_'+ parseInt(i+1) +'" id="numero_'+ parseInt(i+1) +'">'
         }
