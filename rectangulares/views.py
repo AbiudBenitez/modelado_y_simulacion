@@ -324,16 +324,61 @@ def ks_value(request):
                 Fxi += [xi]
                 Dn += [xi - i]
                 Dnm = max(Dn)
+                
+            repeat = Dn.count(Dnm)
             
             request_data = {"n": n, 
                             "lista": lista,
                             "listaOrd": listaOrd,
                             "Fxi": Fxi,
                             "Dn": Dn,
-                            "Dnm": Dnm}
+                            "Dnm": Dnm,
+                            "repeat": repeat}
             
             return JsonResponse(request_data)
         except json.JSONDecodeError:
             return JsonResponse({"error": "Invalid JSON"}, status=405)
     
     return JsonResponse({"error": "Invalid request method"}, status=405)
+
+def f_value(request) :
+    if request.method == "POST" :
+        try :
+            data = json.loads(request.body)
+            lista = data.get("lista")
+            N = int(data.get("N"))
+            alfa = data.get("alfa")
+            newList = []
+            contador = 0
+            n = len(lista)
+            i = 0
+            FEi = n/N
+            
+            while i < N :
+                j = 0
+                temp = []
+                print("salto")
+                while j < N :
+                    if(contador == n) :
+                        temp += []
+                    else :
+                        temp += [lista[contador]]
+                        contador += 1
+                    j += 1
+                    print(temp)
+                    
+                i += 1
+                newList += [temp]
+                    
+            request_data = {
+                "newList": newList,
+                "FEi": FEi,
+                "n": N,
+                "N": n
+            }
+            
+            return JsonResponse(request_data)
+        except json.JSONDecodeError:
+            return JsonResponse({"error": "Invalid JSON"}, status=405)
+    
+    return JsonResponse({"error": "Invalid JSON"}, status=405)
