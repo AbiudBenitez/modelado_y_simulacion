@@ -37,6 +37,14 @@ class opcionales(forms.Form):
   alfaDn = forms.FloatField(
     label="Introduce el valor para α"
   )
+  
+  alfaF = forms.FloatField(
+    label="Introduce el valor para α"
+  )
+  
+  n = forms.FloatField(
+    label="Introduce el valor para n"
+  )
     
   def __init__(self, *args, **kwargs):
     super(opcionales, self).__init__(*args, **kwargs)  
