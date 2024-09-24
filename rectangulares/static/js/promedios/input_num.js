@@ -18,9 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
     BTNSUBMITALPHADN = document.getElementById("btnSubmitAlphaDn"),
     RENDER = new FileReader(),
     TBODYKS = document.getElementById("tbodyks"),
-    TABLEKS = document.getElementById("tableks")
+    TABLEKS = document.getElementById("tableks"),
+    BTNF = document.getElementById("btnSubmitF")
 
-  const DIVKS = document.getElementById("responseks")
+  const DIVKS = document.getElementById("responseks"),
+    FORMKS = document.getElementById("formalphaDn"),
+    RESPONSEF = document.getElementById("responseF")
 
     let Zo = ''
     let Dn = ''
@@ -72,14 +75,13 @@ document.addEventListener("DOMContentLoaded", () => {
           header: false,
           skipEmptyLines: true,
           complete: function(results) {
-            console.log(results.data[0]);
             promedios = results.data[0].map(i=>Number(i));
             calcProm(promedios)
             calcKS(promedios)
+            calcFrec(promedios)
           }
         })
       }
-      console.log(promedios);
       RENDER.readAsText(FILE)
     })
 
@@ -113,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
         console.log(promedio);
         calcProm(promedio)
         calcKS(promedio)
+        calcFrec(promedio)
       }
     })
 
@@ -214,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return response.json();
         })
         .then(data => {
-          console.log('Respuesta del servidor:', data);
+          // console.log('Respuesta del servidor:', data);
           NRVAL.innerHTML = ""
           data['lista'].forEach((element, i) => {
             if(i === 0) {
@@ -252,7 +255,7 @@ document.addEventListener("DOMContentLoaded", () => {
           return response.json();
         })
         .then(data => {
-          console.log('Respuesta del servidor:', data);
+          // console.log('Respuesta del servidor:', data);
           for(let i = 0; i < data['n']; i++) {
             TBODYKS.innerHTML += '<tr></tr>'
             TBODYKS.lastChild.innerHTML += '<td>'+ parseInt(i+1) +'</td>'
@@ -263,9 +266,66 @@ document.addEventListener("DOMContentLoaded", () => {
           TABLEKS.innerHTML += "<p class='text-center col-12'>D<sub>n</sub> = "+ data['Dnm'] +"</p>"
           Dn = data['Dnm']
           n = data['n']
+
+          if(data['repeat'] > 2) {
+            FORMKS.innerHTML = "<p class='text-danger lead'>Los numeros rectangulares son RECHAZADOS por mostrar un patron NO ALEATORIO.</p>"
+          }
         })
         .catch(error => {
           console.error('Error:', error);
         });
     }
+
+    function calcFrec(datos) {
+      
+    BTNF.addEventListener("click", (e) => {
+      e.preventDefault()
+
+      let color
+
+      const N = document.getElementById("id_n").value,
+        alfaF = document.getElementById("id_alfaF").value,
+        table = document.getElementById("order")
+
+      fetch('/f_value/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'aplication/json',
+          'X-CSRFToken': csrftoken
+        },
+        body: JSON.stringify({
+          lista: datos,
+          N: N,
+          alfa: alfaF
+        }),
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error en la solicitud')
+          }
+          return response.json()
+        })
+        .then(data => {
+          console.log('Respuesta del servidor:', data);
+          table.innerHTML = '<thead></thead>'
+          table.lastChild.innerHTML = '<tr></tr>'
+          data['newList'].forEach((Listas, i) => {
+            if(i % 2 == 0) {
+              color = 'light'
+            } else {
+              color = 'dark'
+            }
+            Listas.forEach(element => {
+
+              table.lastChild.lastChild.innerHTML += "<td class='text-center table-"+ color +"'>"+ element +"</td>"
+            });
+          });
+          RESPONSEF.innerHTML += "<p class='text-center'>FE<sub>i</sub> = N/n = "+ data['N'] +" / "+ data['n'] +" = "+ data['FEi'] +"</p>"
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        })
+    })
+  }
+
 })
