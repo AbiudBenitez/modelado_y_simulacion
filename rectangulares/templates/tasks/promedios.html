@@ -52,7 +52,7 @@ Pruebas Estadisticas
   <p class="col-11 text-center" id="nval">
   </p>
   <p class="col-1 col-lg-1 text-end">x̅ = </p>
-  <p class="col-11 col-lg-1" id="mediaVal">
+  <p class="col-11 col-lg-1 text-truncate" id="mediaVal">
   </p>
   <p class="col-md-12 col-lg-10" id="formulaVals">
   </p>
@@ -82,8 +82,8 @@ Pruebas Estadisticas
       </tbody>
     </table>
   </section>
-  <form action="" class="row g-3 text-center m-auto justify-content-center">{% csrf_token %}
-    <label class="col-auto form-label" for="id_alpha">{{ form.alfa.label }}</label>
+  <form action="" id="formalphaDn" class="row g-3 text-center m-auto justify-content-center">{% csrf_token %}
+    <label class="col-auto form-label" for="id_alphaDn">{{ form.alfa.label }}</label>
     <div class="col-auto">{{ form.alfaDn }}</div>
     <button class="btn btn-info btn-sm col-auto" id="btnSubmitAlphaDn">Calcular</button>
   </form>
@@ -91,6 +91,26 @@ Pruebas Estadisticas
     <p class="col-auto" id="respuestaDn" style="display: none;">
     </p>
   </div>
+</div>
+<div class="row" id="responseF">
+  <h3 class="col-12">Prueba de Frecuencias</h3>
+  <form action="" class="row g-3 text-center m-auto justify-content-center">
+    <div class="col-lg-6 col-xsm-1">
+      {{ form.n.as_field_group}}
+    </div>
+    <div class="col-lg-6 col-xsm-1">
+      {{ form.alfaF.as_field_group}}
+    </div>
+    <div class="col-12">
+      <button class="btn btn-info btn-sm col-12" id="btnSubmitF">
+        Calcular
+      </button>
+    </div>
+  </form>
+  <section class="col-12 mt-2 mb-2">
+    <table class="table table-hover" id="order">
+    </table>
+  </section>
 </div>
 
 {% endblock content %}
