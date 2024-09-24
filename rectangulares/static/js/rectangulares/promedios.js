@@ -62,7 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   BTNEXPORT.addEventListener("click", (e) => {
     e.preventDefault()
-    downloadCSV([Nr], "rectangulares.csv")
+    let dia = new Date()
+    downloadCSV([Nr], "rectangulares-"+ dia.getMinutes() +"-"+ dia.getSeconds() +".csv")
   })
 
   function downloadCSV(array, filename) {
