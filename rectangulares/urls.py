@@ -18,4 +18,5 @@ urlpatterns = [
     path("calcular_alpha_dn/", views.calcular_alpha_dn, name="calcular_alpha_dn"),
     path("promedio_value/", views.promedio_value, name="promedio_value"),
     path("ks_value/", views.ks_value, name="ks_value"),
+    path("f_value/", views.f_value, name="f_value"),
 ]
