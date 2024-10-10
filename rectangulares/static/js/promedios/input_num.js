@@ -282,10 +282,12 @@ document.addEventListener("DOMContentLoaded", () => {
       e.preventDefault()
 
       let color
+      let interForm = ''
 
       const N = document.getElementById("id_n").value,
         alfaF = document.getElementById("id_alfaF").value,
-        table = document.getElementById("order")
+        table = document.getElementById("order"),
+        TABLEFO = document.getElementById("fefo")
 
       fetch('/f_value/', {
         method: 'POST',
@@ -307,20 +309,31 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then(data => {
           console.log('Respuesta del servidor:', data);
+          TABLEFO.innerHTML += "<tr><td>FE<sub>i</sub></td></tr><tr><td>FO<sub>i</sub></td></tr>"
           table.innerHTML = '<thead></thead>'
           table.lastChild.innerHTML = '<tr></tr>'
           data['newList'].forEach((Listas, i) => {
+            TABLEFO.lastChild.firstChild.innerHTML += "<td>"+ data['FEi'] +"</td>"
+            TABLEFO.lastChild.lastChild.innerHTML += "<td>"+ Listas.length +"</td>"
             if(i % 2 == 0) {
               color = 'light'
             } else {
               color = 'dark'
             }
-            Listas.forEach(element => {
-
+            Listas.forEach((element, i) => {
+              if (i == 0) {
+                TABLEFO.lastChild.lastChild.lastChild.innerHTML += "<br>|"
+              } else {
+                TABLEFO.lastChild.lastChild.lastChild.innerHTML += "|"
+              }
               table.lastChild.lastChild.innerHTML += "<td class='text-center table-"+ color +"'>"+ element +"</td>"
             });
+            interForm += ` (${Listas.length} - ${data['FEi']}) `
+            console.log(Listas.length);
           });
-          RESPONSEF.innerHTML += "<p class='text-center'>FE<sub>i</sub> = N/n = "+ data['N'] +" / "+ data['n'] +" = "+ data['FEi'] +"</p>"
+          formResponse = `X<sup>2</sup><sub>o</sub> = 1/${data['FEi']} * {${interForm}}`
+          RESPONSEF.innerHTML += `<p class='text-center'>FE<sub>i</sub> = N/n = ${data['N']} / ${data['n']} = ${data['FEi']}</p>`;
+          RESPONSEF.innerHTML += `<p>${formResponse}</p>`
         })
         .catch(error => {
           console.error('Error:', error);
